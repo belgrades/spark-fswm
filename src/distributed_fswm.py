@@ -76,12 +76,27 @@ def jukes_cantor(w0, w1, m, k):
 def udf_jukes_cantor(mask, k):
     return udf(lambda x, y: jukes_cantor(x, y, mask, k), IntegerType())
 
+
 JukesCantor = lambda p: -0.75*log(1-1.25*p)
 
 
-def run(w=5):
+def random_pattern(l, w):
+    from numpy.random import choice
+
+    idx, n = choice(l - 1, w), "11"
+
+    for a in range(l - 1):
+        if a in idx:
+            n += "11"
+        else:
+            n += "00"
+
+    return int(n, 2)
+
+
+def run(w=14, l=114, threshold=0):
     # Creating Data Frame and filtering by threshold
-    pattern, k, threshold = 0b1100001111, 5, 0
+    pattern, k = random_pattern(l, w), w
 
     Chiaromonte = [
         [91, -114, -31, -123],
